@@ -1,6 +1,6 @@
 [package]
 name = "print-piper"
-version = "0.2.2"
+version = "0.3.0"
 description = "A virtual printer that routes print jobs to API endpoints"
 authors = ["notnavindu"]
 edition = "2021"
