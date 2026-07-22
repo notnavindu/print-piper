@@ -16,6 +16,26 @@
                                               (n8n, Zapier, Make, custom APIs, …)
 ```
 
+## Download
+
+**[Download the latest release →](https://github.com/notnavindu/print-piper/releases/latest)**
+
+Latest: **v0.2.2**
+
+| Platform | Download |
+| --- | --- |
+| macOS · Apple Silicon | [`Print.Piper_0.2.2_aarch64.dmg`](https://github.com/notnavindu/print-piper/releases/download/print-piper%400.2.2/Print.Piper_0.2.2_aarch64.dmg) |
+| macOS · Intel | [`Print.Piper_0.2.2_x64.dmg`](https://github.com/notnavindu/print-piper/releases/download/print-piper%400.2.2/Print.Piper_0.2.2_x64.dmg) |
+| Windows · x64 | [`Print.Piper_0.2.2_x64-setup.exe`](https://github.com/notnavindu/print-piper/releases/download/print-piper%400.2.2/Print.Piper_0.2.2_x64-setup.exe) |
+| Windows · Arm64 | [`Print.Piper_0.2.2_arm64-setup.exe`](https://github.com/notnavindu/print-piper/releases/download/print-piper%400.2.2/Print.Piper_0.2.2_arm64-setup.exe) |
+
+Builds are currently **unsigned**, so the first launch shows an "unverified developer" warning:
+
+- **macOS** — right-click the app → **Open** → **Open** (once), or `xattr -dr com.apple.quarantine "/Applications/Print Piper.app"`.
+- **Windows** — on the SmartScreen prompt, **More info** → **Run anyway**.
+
+Then launch it and turn on **Launch at login** in Settings so `>>> PIPE >>>` is always in your print dialog. Print Piper checks for newer releases on launch and shows an in-app link when one is available.
+
 ## How it works
 
 Print Piper is a single Tauri 2 app (Rust core, Svelte UI) that:
