@@ -1,6 +1,6 @@
 {
   "name": "print-piper",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "private": true,
   "description": "A virtual printer that routes print jobs to API endpoints",
   "type": "module",
