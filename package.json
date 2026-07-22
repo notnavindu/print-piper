@@ -13,7 +13,7 @@
     "tauri": "tauri",
     "changeset": "changeset",
     "version:packages": "changeset version && node scripts/sync-version.mjs",
-    "tag:release": "changeset tag"
+    "tag:release": "node scripts/tag-release.mjs"
   },
   "license": "MIT",
   "dependencies": {
