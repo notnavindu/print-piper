@@ -29,12 +29,21 @@ Each link always serves the newest release.
 
 All releases and changelogs: **[github.com/notnavindu/print-piper/releases](https://github.com/notnavindu/print-piper/releases)**
 
-Builds are currently **unsigned**, so the first launch shows an "unverified developer" warning:
+Builds are currently **unsigned**, so the OS blocks them on first launch. They're safe — this is just the warning about software from an unidentified developer.
 
-- **macOS** — right-click the app → **Open** → **Open** (once), or `xattr -dr com.apple.quarantine "/Applications/Print Piper.app"`.
+- **macOS** — because the download is unsigned, macOS may say **"Print Piper.app is damaged"** or **"unidentified developer."** Drag the app into **Applications**, then clear the download quarantine:
+
+  ```sh
+  xattr -dr com.apple.quarantine "/Applications/Print Piper.app"
+  ```
+
+  It opens normally afterward. (GUI alternative: open it once, then **System Settings → Privacy & Security → Open Anyway**.)
+
 - **Windows** — on the SmartScreen prompt, **More info** → **Run anyway**.
 
 Then launch it and turn on **Launch at login** in Settings so `>>> PIPE >>>` is always in your print dialog. Print Piper checks for newer releases on launch and shows an in-app link when one is available.
+
+> Signed & notarized builds (no warning at all) are on the roadmap.
 
 ## How it works
 
