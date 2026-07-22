@@ -5,6 +5,7 @@ mod logging;
 mod models;
 mod state;
 mod store;
+mod update;
 
 use logging::plog;
 use serde_json::json;
@@ -245,6 +246,8 @@ pub fn run() {
             commands::get_capture_status,
             commands::clear_spool,
             commands::show_main_window,
+            update::check_update,
+            update::open_external,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

@@ -75,6 +75,13 @@ export interface DispatchResult {
   error: string | null;
 }
 
+export interface UpdateInfo {
+  current: string;
+  latest: string | null;
+  update_available: boolean;
+  url: string;
+}
+
 export interface LogEntry {
   seq: number;
   ts: string;

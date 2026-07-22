@@ -30,9 +30,8 @@ Riding the industry's IPP convergence: Microsoft is deprecating third-party prin
 
 | Platform    | State                                                                                                                                                                                                                                                          |
 | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **macOS**   | ✅ Working end-to-end (discover → print → preview → dispatch)                                                                                                                                                                                                  |
-| **Windows** | 🧪 Built but unvalidated — needs the [blind-test protocol](spec/06-packaging-windows-validation.md). The open question: does the in-box IPP class driver send vector PDF or PWG raster? The Logs tab records `document-format` per job to answer exactly this. |
-| **Linux**   | 🔜 Should be nearly free (same IPP + CUPS path); not wired up yet                                                                                                                                                                                              |
+| **macOS**   | ✅ Working end-to-end (discover → print → preview → dispatch) |
+| **Windows** | ✅ Validated end-to-end via the [blind-test protocol](spec/06-packaging-windows-validation.md) |
 
 Security defaults: capture is **loopback-only** (LAN printing is an explicit opt-in), spooled documents are pruned (50 jobs / 7 days), strict Tauri capabilities + CSP, asset protocol scoped to the spool dir only. Known gap: endpoint header values (API keys) live in a `0600` JSON file, not yet the OS keychain.
 
@@ -62,6 +61,5 @@ Design lives in [`spec/`](spec/) — one slice per subsystem (capture, shell, en
 
 ## Roadmap
 
-- Windows validation run (see spec 06 — takes any Windows machine ~10 minutes)
 - Packaging: signed/notarized `.dmg`, Windows installer via CI
 - Endpoint secrets → OS keychain

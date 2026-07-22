@@ -7,6 +7,7 @@ import type {
   Job,
   LogEntry,
   Settings,
+  UpdateInfo,
 } from "./types";
 
 export const api = {
@@ -29,6 +30,9 @@ export const api = {
   getCaptureStatus: () => invoke<CaptureStatus>("get_capture_status"),
   clearSpool: () => invoke<void>("clear_spool"),
   showMainWindow: () => invoke<void>("show_main_window"),
+
+  checkUpdate: () => invoke<UpdateInfo>("check_update"),
+  openExternal: (url: string) => invoke<void>("open_external", { url }),
 };
 
 export const events = {

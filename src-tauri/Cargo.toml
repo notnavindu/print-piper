@@ -28,6 +28,7 @@ anyhow = "1"
 uuid = { version = "1", features = ["v4", "serde"] }
 chrono = { version = "0.4", features = ["serde"] }
 log = "0.4"
+semver = "1"
 ippper = { version = "0.6", default-features = false, features = ["server"] }
 ipp = { version = "6", default-features = false }
 mdns-sd = "0.20"

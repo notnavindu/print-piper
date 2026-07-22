@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import { fly } from "svelte/transition";
   import { api, events } from "$lib/api";
-  import type { CaptureStatus, Endpoint } from "$lib/types";
+  import type { CaptureStatus, Endpoint, UpdateInfo } from "$lib/types";
   import Brand from "$lib/Brand.svelte";
   import EndpointEditor from "$lib/EndpointEditor.svelte";
   import EndpointActivity from "$lib/EndpointActivity.svelte";
@@ -15,6 +15,7 @@
   let endpoints = $state<Endpoint[]>([]);
   let status = $state<CaptureStatus | null>(null);
   let booted = $state(false);
+  let update = $state<UpdateInfo | null>(null);
 
   const selectedEndpoint = $derived(endpoints.find((e) => e.id === selected) ?? null);
   const viewKey = $derived(`${selected ?? "home"}:${detailTab}`);
@@ -33,6 +34,8 @@
       booted = true;
     });
     api.getCaptureStatus().then((s) => (status = s));
+    // best-effort: silently ignored if offline / rate-limited
+    api.checkUpdate().then((u) => (update = u.update_available ? u : null)).catch(() => {});
     const unStatus = events.onCaptureStatus((s) => (status = s));
     const unEndpoints = events.onEndpointsChanged(() => refresh());
     return () => {
@@ -83,6 +86,16 @@
         <svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="2.2" stroke="currentColor" stroke-width="1.6"/><path d="M8 1.8v2M8 12.2v2M1.8 8h2M12.2 8h2M3.6 3.6l1.4 1.4M11 11l1.4 1.4M12.4 3.6L11 5M5 11l-1.4 1.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
         Settings
       </button>
+      {#if update}
+        <button
+          class="update"
+          onclick={() => api.openExternal(update!.url)}
+          title="Print Piper {update.latest} is available — click to view the release"
+        >
+          <span class="up-dot"></span>
+          Update available{update.latest ? ` · v${update.latest}` : ""}
+        </button>
+      {/if}
       {#if status}
         <div class="status">
           {#if status.error}
@@ -272,6 +285,33 @@
   .nav.active {
     background: var(--raised);
     color: var(--text);
+  }
+  .update {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    width: 100%;
+    margin-top: 2px;
+    padding: 7px 10px;
+    border: none;
+    border-radius: 8px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 600;
+    text-align: left;
+  }
+  .update:hover {
+    background: rgba(61, 220, 151, 0.18);
+  }
+  .up-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 99px;
+    flex-shrink: 0;
+    background: var(--accent);
+    box-shadow: 0 0 6px var(--accent-glow);
+    animation: breathe 2.8s ease-in-out infinite;
   }
   .status {
     display: flex;
