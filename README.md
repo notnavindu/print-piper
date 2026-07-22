@@ -2,6 +2,10 @@
   <img src="./assets/banner.png" alt="Print Piper — ⌘P → pipe to anywhere" width="100%" />
 </p>
 
+<p align="center">
+  <img src="./assets/screenshot.png" alt="Print Piper — screenshot" width="100%" />
+</p>
+
 **A virtual printer for automators.** Hit ⌘P in any app, pick an endpoint, and your document lands in an API as a true vector PDF — no drivers, no cloud, no admin rights.
 
 ```

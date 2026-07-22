@@ -27,9 +27,29 @@ pub struct AppState {
     pub boot_warnings: Mutex<Vec<String>>,
 }
 
+/// One-time migration for the bundle-identifier rename
+/// (`com.printpiper.app` → `com.printpiper.desktop`). If the new app-data dir
+/// doesn't exist yet but the old one does, move it over so settings, endpoints,
+/// and spool carry across untouched. Must run before the new dir is created.
+fn migrate_legacy_app_data(new_dir: &std::path::Path) {
+    const LEGACY_ID: &str = "com.printpiper.app";
+    if new_dir.exists() {
+        return;
+    }
+    let Some(parent) = new_dir.parent() else {
+        return;
+    };
+    let legacy = parent.join(LEGACY_ID);
+    if legacy.is_dir() {
+        // same parent → same filesystem, so a rename is atomic and cheap
+        let _ = std::fs::rename(&legacy, new_dir);
+    }
+}
+
 impl AppState {
     pub fn init(app: &tauri::AppHandle) -> anyhow::Result<Self> {
         let app_data = app.path().app_data_dir()?;
+        migrate_legacy_app_data(&app_data);
         let spool_dir = app_data.join("spool");
         std::fs::create_dir_all(&spool_dir)?;
         #[cfg(unix)]

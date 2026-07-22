@@ -1,0 +1,81 @@
+name: release
+
+# Triggered by the release tag that the version workflow pushes
+# (changeset tag → "print-piper@X.Y.Z"). Builds macOS (Intel + Apple Silicon)
+# and Windows (x64 + arm64) installers and attaches them to a single draft
+# GitHub Release. Publish the draft once you've eyeballed the binaries.
+
+on:
+  push:
+    tags: ["print-piper@*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing tag to (re)build a release for, e.g. print-piper@0.3.0"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            target: aarch64-apple-darwin
+            args: --target aarch64-apple-darwin
+          - os: macos-latest
+            target: x86_64-apple-darwin
+            args: --target x86_64-apple-darwin
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            args: --target x86_64-pc-windows-msvc --bundles nsis
+          - os: windows-latest
+            target: aarch64-pc-windows-msvc
+            args: --target aarch64-pc-windows-msvc --bundles nsis
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.tag || github.ref_name }}
+
+      - name: Resolve version
+        id: v
+        shell: bash
+        run: |
+          tag="${{ github.event.inputs.tag || github.ref_name }}"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "version=${tag#print-piper@}" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - uses: swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+          key: ${{ matrix.target }}
+
+      - run: npm ci
+
+      - uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: ${{ steps.v.outputs.tag }}
+          releaseName: Print Piper v${{ steps.v.outputs.version }}
+          releaseDraft: true
+          releaseBody: |
+            Desktop builds of Print Piper. See `CHANGELOG.md` for what changed.
+
+            **These are unsigned builds** — first launch shows an "unverified developer" warning.
+            - **macOS**: pick `aarch64` for Apple Silicon, `x64` for Intel. Right-click the app → **Open** → **Open** (once).
+            - **Windows**: on the SmartScreen prompt, **More info** → **Run anyway**.
+          args: ${{ matrix.args }}

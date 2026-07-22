@@ -1,0 +1,44 @@
+name: version
+
+# Consumes changesets on main: opens/updates a "version packages" PR, and once
+# that PR is merged, pushes the release tag that triggers release.yml.
+#
+# Requires a repo secret RELEASE_PAT (a fine-grained PAT with contents:write +
+# pull-requests:write). It's needed because a tag pushed with the default
+# GITHUB_TOKEN does NOT trigger other workflows — the PAT's push does.
+
+on:
+  push:
+    branches: [main]
+
+concurrency: version-${{ github.ref }}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.RELEASE_PAT }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Version PR / release tag
+        uses: changesets/action@v1
+        with:
+          version: npm run version:packages
+          publish: npm run tag:release
+          commit: "chore: version packages"
+          title: "chore: version packages"
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_PAT }}

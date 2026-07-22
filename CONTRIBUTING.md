@@ -62,6 +62,33 @@ still needs validation (see `spec/06-packaging-windows-validation.md`). If you h
 a Windows machine, that blind-test is one of the most valuable contributions right
 now.
 
+## Versioning & releases (maintainers)
+
+Versions are automated — never hand-edit them. `package.json` is the single source
+of truth; `tauri.conf.json` reads its version from there, and `scripts/sync-version.mjs`
+mirrors it into `Cargo.toml`/`Cargo.lock` during the version step.
+
+Flow:
+
+1. Every user-facing PR includes a changeset (`npx changeset`) — see
+   [`.changeset/README.md`](.changeset/README.md).
+2. `.github/workflows/version.yml` opens a **"version packages"** PR that consumes
+   the changesets, bumps the version, and updates `CHANGELOG.md`.
+3. Merging that PR pushes a `print-piper@X.Y.Z` tag.
+4. `.github/workflows/release.yml` builds macOS (Intel + Apple Silicon) and Windows
+   (x64 + arm64) installers and attaches them to a **draft** GitHub Release. Review
+   the binaries, then publish the draft.
+
+### One-time setup
+
+- Add a repo secret **`RELEASE_PAT`** — a fine-grained personal access token with
+  `contents: write` + `pull requests: write`. It is required because a tag pushed
+  with the default `GITHUB_TOKEN` will not trigger the release workflow; the PAT's
+  push does. (Settings → Secrets and variables → Actions → New repository secret.)
+
+Builds are currently **unsigned**; signing/notarization can be added later by
+supplying the platform certs as secrets to `tauri-action` (no workflow changes).
+
 ## Security
 
 Found a vulnerability? Please follow [`SECURITY.md`](SECURITY.md) rather than
