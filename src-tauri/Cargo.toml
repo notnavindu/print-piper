@@ -1,0 +1,39 @@
+[package]
+name = "print-piper"
+version = "0.2.1"
+description = "A virtual printer that routes print jobs to API endpoints"
+authors = ["notnavindu"]
+edition = "2021"
+
+[lib]
+name = "print_piper_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = ["tray-icon", "protocol-asset"] }
+tauri-plugin-single-instance = "2"
+tauri-plugin-autostart = "2"
+tauri-plugin-log = "2"
+tauri-plugin-notification = "2"
+tauri-plugin-dialog = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "fs", "io-util", "net", "sync", "time"] }
+tokio-util = { version = "0.7", features = ["compat", "io"] }
+futures = "0.3"
+anyhow = "1"
+uuid = { version = "1", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+log = "0.4"
+ippper = { version = "0.6", default-features = false, features = ["server"] }
+ipp = { version = "6", default-features = false }
+mdns-sd = "0.20"
+if-addrs = "0.13"
+gethostname = "1"
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "multipart", "stream"] }
+http = "1"
+hyper = { version = "1", features = ["server", "http1"] }
+hyper-util = { version = "0.1", features = ["tokio", "server", "server-auto"] }

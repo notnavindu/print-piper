@@ -1,0 +1,59 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Print Piper",
+  "version": "0.2.1",
+  "identifier": "com.printpiper.app",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../build"
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "Print Piper",
+        "width": 960,
+        "height": 640,
+        "minWidth": 760,
+        "minHeight": 500,
+        "titleBarStyle": "Overlay",
+        "hiddenTitle": true
+      },
+      {
+        "label": "picker",
+        "title": "Print Piper — send to…",
+        "url": "/picker",
+        "width": 820,
+        "height": 500,
+        "minWidth": 720,
+        "minHeight": 440,
+        "visible": false,
+        "alwaysOnTop": true,
+        "center": true,
+        "skipTaskbar": true,
+        "titleBarStyle": "Overlay",
+        "hiddenTitle": true
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' asset: http://asset.localhost data:; frame-src 'self' asset: http://asset.localhost; object-src 'self' asset: http://asset.localhost; connect-src 'self' ipc: http://ipc.localhost",
+      "assetProtocol": {
+        "enable": true,
+        "scope": ["$APPDATA/spool/*", "$APPDATA/spool/**"]
+      }
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ]
+  }
+}

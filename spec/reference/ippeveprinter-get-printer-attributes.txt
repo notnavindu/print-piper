@@ -1,0 +1,107 @@
+"/usr/share/cups/ipptool/get-printer-attributes.test":
+    Get-Printer-Attributes:
+        attributes-charset (charset) = utf-8
+        attributes-natural-language (naturalLanguage) = en
+        printer-uri (uri) = ipp://localhost:8632/ipp/print
+        requested-attributes (1setOf keyword) = all,media-col-database
+    Get printer attributes using get-printer-attributes                  [PASS]
+        RECEIVED: 8608 bytes in response
+        status-code = successful-ok (successful-ok)
+        attributes-charset (charset) = utf-8
+        attributes-natural-language (naturalLanguage) = en
+        color-supported (boolean) = false
+        copies-default (integer) = 1
+        copies-supported (rangeOfInteger) = 1-999
+        document-password-supported (integer) = 1023
+        finishings-default (enum) = none
+        finishings-supported (enum) = none
+        media-bottom-margin-supported (1setOf integer) = 0,1168
+        media-col-database (1setOf collection) = {media-key=na_letter_8.5x11in media-size={x-dimension=21590 y-dimension=27940} media-size-name=na_letter_8.5x11in media-bottom-margin=635 media-left-margin=635 media-right-margin=635 media-top-margin=635},{media-key=na_legal_8.5x14in media-size={x-dimension=21590 y-dimension=35560} media-size-name=na_legal_8.5x14in media-bottom-margin=635 media-left-margin=635 media-right-margin=635 media-top-margin=635},{media-key=iso_a4_210x297mm media-size={x-dimension=21000 y-dimension=29700} media-size-name=iso_a4_210x297mm media-bottom-margin=635 media-left-margin=340 media-right-margin=340 media-top-margin=635},{media-key=na_number-10_4.125x9.5in_by-pass-tray media-size={x-dimension=10477 y-dimension=24130} media-size-name=na_number-10_4.125x9.5in media-bottom-margin=635 media-left-margin=635 media-right-margin=635 media-top-margin=635 media-source=by-pass-tray},{media-key=iso_dl_110x220mm_by-pass-tray media-size={x-dimension=11000 y-dimension=22000} media-size-name=iso_dl_110x220mm media-bottom-margin=635 media-left-margin=635 media-right-margin=635 media-top-margin=635 media-source=by-pass-tray}
+        media-col-default (collection) = {media-key=na_letter_8.5x11in_main_stationery media-size={x-dimension=21590 y-dimension=27940} media-size-name=na_letter_8.5x11in media-bottom-margin=635 media-left-margin=635 media-right-margin=635 media-top-margin=635 media-source=main media-type=stationery}
+        media-col-ready (1setOf collection) = {media-key=na_letter_8.5x11in_main_stationery media-size={x-dimension=21590 y-dimension=27940} media-size-name=na_letter_8.5x11in media-bottom-margin=635 media-left-margin=635 media-right-margin=635 media-top-margin=635 media-source=main media-type=stationery},{media-key=na_number-10_4.125x9.5in_by-pass-tray_envelope media-size={x-dimension=10477 y-dimension=24130} media-size-name=na_number-10_4.125x9.5in media-bottom-margin=635 media-left-margin=635 media-right-margin=635 media-top-margin=635 media-source=by-pass-tray media-type=envelope}
+        media-default (keyword) = na_letter_8.5x11in
+        media-left-margin-supported (1setOf integer) = 340,635
+        media-right-margin-supported (1setOf integer) = 340,635
+        media-ready (1setOf keyword) = na_letter_8.5x11in,na_number-10_4.125x9.5in
+        media-supported (1setOf keyword) = na_letter_8.5x11in,na_legal_8.5x14in,iso_a4_210x297mm,na_number-10_4.125x9.5in,iso_dl_110x220mm
+        media-size-supported (1setOf collection) = {x-dimension=21590 y-dimension=27940},{x-dimension=21590 y-dimension=35560},{x-dimension=21000 y-dimension=29700},{x-dimension=10477 y-dimension=24130},{x-dimension=11000 y-dimension=22000}
+        media-source-supported (1setOf keyword) = auto,main,manual,by-pass-tray
+        media-top-margin-supported (1setOf integer) = 0,102
+        media-type-supported (1setOf keyword) = auto,cardstock,envelope,labels,other,stationery,stationery-letterhead,transparency
+        orientation-requested-default (enum) = portrait
+        orientation-requested-supported (1setOf enum) = portrait,landscape,reverse-landscape,reverse-portrait
+        output-bin-default (keyword) = face-down
+        output-bin-supported (keyword) = face-down
+        overrides-supported (1setOf keyword) = document-numbers,media,media-col,orientation-requested,pages
+        page-ranges-supported (boolean) = true
+        pages-per-minute (integer) = 10
+        print-color-mode-default (keyword) = monochrome
+        print-color-mode-supported (keyword) = monochrome
+        print-content-optimize-default (keyword) = auto
+        print-content-optimize-supported (keyword) = auto
+        print-quality-default (enum) = normal
+        print-quality-supported (1setOf enum) = draft,normal,high
+        print-rendering-intent-default (keyword) = auto
+        print-rendering-intent-supported (keyword) = auto
+        printer-device-id (textWithoutLanguage) = MFG:Example;MDL:Printer;CMD:PDF;
+        printer-input-tray (1setOf octetString) = type=sheetFeedAutoRemovableTray;mediafeed=0;mediaxfeed=0;maxcapacity=-2;level=-2;status=0;name=auto,type=sheetFeedAutoRemovableTray;mediafeed=0;mediaxfeed=0;maxcapacity=250;level=100;status=0;name=main,type=sheetFeedManual;mediafeed=0;mediaxfeed=0;maxcapacity=1;level=-2;status=0;name=manual,type=sheetFeedAutoNonRemovableTray;mediafeed=0;mediaxfeed=0;maxcapacity=25;level=-2;status=0;name=by-pass-tray
+        printer-make-and-model (textWithoutLanguage) = Example Printer
+        printer-resolution-default (resolution) = 600dpi
+        printer-resolution-supported (resolution) = 600dpi
+        printer-supply (1setOf octetString) = index=1;class=receptacleThatIsFilled;type=wasteToner;unit=percent;maxcapacity=100;level=25;colorantname=unknown;,index=2;class=supplyThatIsConsumed;type=toner;unit=percent;maxcapacity=100;level=75;colorantname=black;
+        printer-supply-description (1setOf textWithoutLanguage) = Toner Waste Tank,Black Toner
+        sides-default (keyword) = one-sided
+        sides-supported (keyword) = one-sided
+        charset-configured (charset) = utf-8
+        charset-supported (1setOf charset) = us-ascii,utf-8
+        compression-supported (1setOf keyword) = deflate,gzip,none
+        document-format-default (mimeMediaType) = application/octet-stream
+        document-format-supported (1setOf mimeMediaType) = application/octet-stream,application/pdf
+        generated-natural-language-supported (naturalLanguage) = en
+        identify-actions-default (keyword) = sound
+        identify-actions-supported (1setOf keyword) = display,sound
+        ipp-features-supported (keyword) = ipp-everywhere
+        ipp-versions-supported (1setOf keyword) = 1.1,2.0
+        job-creation-attributes-supported (1setOf keyword) = document-access,document-charset,document-format,document-message,document-metadata,document-name,document-natural-language,ipp-attribute-fidelity,job-name,job-priority,copies,document-password,finishings,media,orientation-requested,output-bin,overrides,page-ranges,print-color-mode,print-content-optimize,print-quality,print-rendering-intent,printer-resolution,sides
+        job-ids-supported (boolean) = true
+        job-k-octets-supported (rangeOfInteger) = 0-971350180
+        job-priority-default (integer) = 50
+        job-priority-supported (integer) = 1
+        job-sheets-default (nameWithoutLanguage) = none
+        job-sheets-supported (nameWithoutLanguage) = none
+        media-col-supported (1setOf keyword) = media-bottom-margin,media-left-margin,media-right-margin,media-size,media-size-name,media-source,media-top-margin,media-type
+        multiple-document-handling-supported (1setOf keyword) = separate-documents-uncollated-copies,separate-documents-collated-copies
+        multiple-document-jobs-supported (boolean) = false
+        multiple-operation-time-out (integer) = 60
+        multiple-operation-time-out-action (keyword) = abort-job
+        natural-language-configured (naturalLanguage) = en
+        operations-supported (1setOf enum) = Print-Job,Print-URI,Validate-Job,Create-Job,Send-Document,Send-URI,Cancel-Job,Get-Job-Attributes,Get-Jobs,Get-Printer-Attributes,Cancel-My-Jobs,Close-Job,Identify-Printer
+        pdl-override-supported (keyword) = attempted
+        preferred-attributes-supported (boolean) = false
+        printer-get-attributes-supported (keyword) = document-format
+        printer-geo-location (unknown) = unknown
+        printer-icons (uri) = https://printer.local:8632/icon.png
+        printer-is-accepting-jobs (boolean) = true
+        printer-info (textWithoutLanguage) = Print Piper
+        printer-location (textWithoutLanguage) = 
+        printer-more-info (uri) = https://printer.local:8632/
+        printer-name (nameWithoutLanguage) = Print Piper
+        printer-organization (textWithoutLanguage) = 
+        printer-organizational-unit (textWithoutLanguage) = 
+        printer-supply-info-uri (uri) = https://printer.local:8632/supplies
+        printer-uri-supported (1setOf uri) = ipp://printer.local:8632/ipp/print,ipps://printer.local:8632/ipp/print
+        printer-uuid (uri) = urn:uuid:9efeb1c4-a00b-3022-7bd3-be095a2534cc
+        reference-uri-schemes-supported (1setOf uriScheme) = file,ftp,http,https
+        uri-authentication-supported (1setOf keyword) = none,none
+        uri-security-supported (1setOf keyword) = none,tls
+        which-jobs-supported (1setOf keyword) = completed,not-completed,aborted,all,canceled,pending,pending-held,processing,processing-stopped
+        printer-config-change-date-time (dateTime) = 2026-07-18T23:52:50Z
+        printer-config-change-time (integer) = 0
+        printer-current-time (dateTime) = 2026-07-18T23:52:56Z
+        printer-state (enum) = idle
+        printer-state-change-date-time (dateTime) = 2026-07-18T23:52:50Z
+        printer-state-change-time (integer) = 0
+        printer-state-message (textWithoutLanguage) = Idle.
+        printer-state-reasons (keyword) = none
+        printer-up-time (integer) = 6
+        queued-job-count (integer) = 0
