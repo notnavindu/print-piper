@@ -26,15 +26,23 @@ jobs:
           - os: macos-latest
             target: aarch64-apple-darwin
             args: --target aarch64-apple-darwin
+            bundle: dmg/*.dmg
+            stable: Print-Piper-macos-arm64.dmg
           - os: macos-latest
             target: x86_64-apple-darwin
             args: --target x86_64-apple-darwin
+            bundle: dmg/*.dmg
+            stable: Print-Piper-macos-x64.dmg
           - os: windows-latest
             target: x86_64-pc-windows-msvc
             args: --target x86_64-pc-windows-msvc --bundles nsis
+            bundle: nsis/*-setup.exe
+            stable: Print-Piper-windows-x64-setup.exe
           - os: windows-latest
             target: aarch64-pc-windows-msvc
             args: --target aarch64-pc-windows-msvc --bundles nsis
+            bundle: nsis/*-setup.exe
+            stable: Print-Piper-windows-arm64-setup.exe
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -79,3 +87,16 @@ jobs:
             - **macOS**: pick `aarch64` for Apple Silicon, `x64` for Intel. Right-click the app → **Open** → **Open** (once).
             - **Windows**: on the SmartScreen prompt, **More info** → **Run anyway**.
           args: ${{ matrix.args }}
+
+      # Upload a copy under a version-free name so
+      # /releases/latest/download/<stable> links never go stale.
+      - name: Publish stable-named installer
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          src=$(ls src-tauri/target/${{ matrix.target }}/release/bundle/${{ matrix.bundle }} | head -1)
+          echo "aliasing $src -> ${{ matrix.stable }}"
+          cp "$src" "${{ matrix.stable }}"
+          gh release upload "${{ steps.v.outputs.tag }}" "${{ matrix.stable }}" \
+            --repo "${{ github.repository }}" --clobber

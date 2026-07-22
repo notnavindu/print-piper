@@ -18,16 +18,16 @@
 
 ## Download
 
-**[Download the latest release →](https://github.com/notnavindu/print-piper/releases/latest)**
-
-Latest: **v0.2.2**
+Each link always serves the newest release.
 
 | Platform | Download |
 | --- | --- |
-| macOS · Apple Silicon | [`Print.Piper_0.2.2_aarch64.dmg`](https://github.com/notnavindu/print-piper/releases/download/print-piper%400.2.2/Print.Piper_0.2.2_aarch64.dmg) |
-| macOS · Intel | [`Print.Piper_0.2.2_x64.dmg`](https://github.com/notnavindu/print-piper/releases/download/print-piper%400.2.2/Print.Piper_0.2.2_x64.dmg) |
-| Windows · x64 | [`Print.Piper_0.2.2_x64-setup.exe`](https://github.com/notnavindu/print-piper/releases/download/print-piper%400.2.2/Print.Piper_0.2.2_x64-setup.exe) |
-| Windows · Arm64 | [`Print.Piper_0.2.2_arm64-setup.exe`](https://github.com/notnavindu/print-piper/releases/download/print-piper%400.2.2/Print.Piper_0.2.2_arm64-setup.exe) |
+| macOS · Apple Silicon | [**Download `.dmg`**](https://github.com/notnavindu/print-piper/releases/latest/download/Print-Piper-macos-arm64.dmg) |
+| macOS · Intel | [**Download `.dmg`**](https://github.com/notnavindu/print-piper/releases/latest/download/Print-Piper-macos-x64.dmg) |
+| Windows · x64 | [**Download `.exe`**](https://github.com/notnavindu/print-piper/releases/latest/download/Print-Piper-windows-x64-setup.exe) |
+| Windows · Arm64 | [**Download `.exe`**](https://github.com/notnavindu/print-piper/releases/latest/download/Print-Piper-windows-arm64-setup.exe) |
+
+All releases and changelogs: **[github.com/notnavindu/print-piper/releases](https://github.com/notnavindu/print-piper/releases)**
 
 Builds are currently **unsigned**, so the first launch shows an "unverified developer" warning:
 
