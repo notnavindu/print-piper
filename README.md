@@ -43,7 +43,7 @@ Builds are currently **unsigned**, so the OS blocks them on first launch. They'r
 
 Then launch it and turn on **Launch at login** in Settings so `>>> PIPE >>>` is always in your print dialog. Print Piper checks for newer releases on launch and shows an in-app link when one is available.
 
-> Signed & notarized builds (no warning at all) are on the roadmap.
+> Signed & notarized builds? I'm not paying Apple $99/year to sign this sh\*t! Just run the `xattr` command above.
 
 ## How it works
 
