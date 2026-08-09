@@ -66,11 +66,18 @@ impl AppState {
         let (endpoints, w1): (Vec<Endpoint>, _) = store::read_json(&endpoints_path);
         let (jobs, w2): (Vec<Job>, _) = store::read_json(&jobs_path);
         let (settings, w3): (Settings, _) = store::read_json(&settings_path);
+        let settings_unreadable = w3.is_some();
         for w in [w1, w2, w3].into_iter().flatten() {
             warnings.push(w);
         }
-        // persist settings back so the generated printer_uuid survives first run
-        let _ = store::write_json_atomic(&settings_path, &settings);
+        // Persist settings back so the generated printer_uuid survives first run — but only
+        // when there was nothing usable to read. This runs before the first window exists,
+        // and write_json_atomic fsyncs (F_FULLFSYNC on macOS, a full drive cache flush), so
+        // doing it unconditionally added that stall to every launch to rewrite an identical
+        // file.
+        if settings_unreadable || !settings_path.exists() {
+            let _ = store::write_json_atomic(&settings_path, &settings);
+        }
 
         let http = reqwest::Client::builder()
             .timeout(std::time::Duration::from_secs(30))

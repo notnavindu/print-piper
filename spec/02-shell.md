@@ -26,8 +26,8 @@
 
 | Window | Label | Behavior |
 |---|---|---|
-| Main | `main` | Tabs: **Endpoints**, **Logs** (+ minimal Settings section). Closing hides to tray, does not quit. |
-| Picker | `picker` | Defined in config with `visible: false`, pre-created at startup. On `job:received`: populate, `show + set_focus`, always-on-top, centered. Esc hides (job → `dismissed`). |
+| Main | `main` | Tabs: **Endpoints**, **Logs** (+ minimal Settings section). Closing hides to tray, does not quit. Also `create: false` + built in `setup`, same reason as the picker. |
+| Picker | `picker` | Defined in config with `visible: false` and `create: false`, built in the `setup` hook (after `manage(AppState)`, so no webview can invoke a command before the state exists) and thus still pre-created at startup. On `job:received`: populate, `show + set_focus`, always-on-top, centered. Esc hides (job → `dismissed`). |
 
 - Tray: icon + menu `Open Print Piper` / `Pause capture` (stops accepting jobs, printer stays visible) / `Quit`. Left-click opens main window.
 - macOS: keep dock icon in v1 (simpler); `ActivationPolicy::Accessory` is a later polish item.

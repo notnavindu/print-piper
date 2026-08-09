@@ -13,6 +13,7 @@
     "windows": [
       {
         "label": "main",
+        "create": false,
         "title": "Print Piper",
         "width": 960,
         "height": 640,
@@ -23,6 +24,7 @@
       },
       {
         "label": "picker",
+        "create": false,
         "title": "Print Piper — send to…",
         "url": "/picker",
         "width": 820,

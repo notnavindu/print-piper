@@ -147,6 +147,21 @@ pub fn run() {
             let state = AppState::init(app.handle())?;
             app.manage(state);
 
+            // Both windows carry `"create": false` in tauri.conf.json and are built here
+            // instead. Tauri's own setup creates config windows BEFORE running this
+            // closure, so the main webview could invoke `list_endpoints` before the
+            // `manage` above had run and get back "state not managed" — which is why the
+            // endpoint list came up empty until a save re-fetched it. Building them after
+            // the state exists removes the race rather than papering over it.
+            // `.filter(|c| !c.create)` is the exact complement of Tauri's own loop, so a
+            // window added later without `"create": false` is still built once by Tauri
+            // rather than twice (the second build fails with WebviewLabelAlreadyExists,
+            // which would abort setup and leave the app with no window and no tray).
+            let window_configs = app.config().app.windows.clone();
+            for cfg in window_configs.iter().filter(|c| !c.create) {
+                tauri::WebviewWindowBuilder::from_config(app.handle(), cfg)?.build()?;
+            }
+
             // surface any config-corruption found during load
             let warnings: Vec<String> = app
                 .state::<AppState>()

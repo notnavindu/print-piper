@@ -16,23 +16,38 @@
   let status = $state<CaptureStatus | null>(null);
   let booted = $state(false);
   let update = $state<UpdateInfo | null>(null);
+  let loadError = $state("");
 
   const selectedEndpoint = $derived(endpoints.find((e) => e.id === selected) ?? null);
   const viewKey = $derived(`${selected ?? "home"}:${detailTab}`);
 
   async function refresh() {
     endpoints = await api.listEndpoints();
+    loadError = "";
     // selection can go stale after a delete elsewhere
     if (selected && !["new", "logs", "settings"].includes(selected) && !selectedEndpoint) {
       selected = endpoints[0]?.id ?? null;
     }
   }
 
+  // Load, surface any failure, and land on a sensible selection. Used by both the
+  // initial mount and Retry — a retry that filled the sidebar but left `selected`
+  // null would show the first-run hero next to a list of saved endpoints.
+  async function load() {
+    try {
+      await refresh();
+    } catch (e) {
+      loadError = String(e);
+    }
+    if (!selected && endpoints.length > 0) selected = endpoints[0].id;
+    booted = true;
+  }
+
   onMount(() => {
-    refresh().then(() => {
-      if (!selected && endpoints.length > 0) selected = endpoints[0].id;
-      booted = true;
-    });
+    // A rejected load used to leave `booted` false forever: an empty endpoint list and
+    // a blank pane, with the saved endpoints only appearing once some other action
+    // triggered a re-fetch. Surface it and let the user retry instead.
+    load();
     api.getCaptureStatus().then((s) => (status = s));
     // best-effort: silently ignored if offline / rate-limited
     api.checkUpdate().then((u) => (update = u.update_available ? u : null)).catch(() => {});
@@ -114,6 +129,12 @@
 
   <main>
     <div class="drag-strip" data-tauri-drag-region></div>
+    {#if loadError}
+      <div class="load-error" role="alert">
+        <span>Couldn't load your endpoints — {loadError}</span>
+        <button onclick={() => load()}>Retry</button>
+      </div>
+    {/if}
     {#key viewKey}
       <div class="view" in:fly={{ y: 8, duration: 200 }}>
         {#if selected === "logs"}
@@ -358,6 +379,31 @@
     right: 0;
     height: 26px;
     z-index: 5;
+  }
+  .load-error {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 30px 22px 0 22px;
+    padding: 9px 12px;
+    border: 1px solid var(--danger);
+    border-radius: 9px;
+    background: rgba(255, 107, 107, 0.08);
+    font-size: 12.5px;
+    color: var(--text);
+  }
+  .load-error button {
+    flex-shrink: 0;
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 3px 10px;
+    color: var(--text);
+    font-size: 12px;
+  }
+  .load-error button:hover {
+    background: var(--hover);
   }
   .view {
     flex: 1;
