@@ -34,11 +34,36 @@ pub fn save_endpoint(app: AppHandle, state: State<'_, AppState>, mut endpoint: E
     endpoint.variables.retain(|v| !v.key.trim().is_empty());
     for v in endpoint.variables.iter_mut() {
         v.key = v.key.trim().to_string();
+        if v.transport.is_empty() {
+            v.transport = "auto".into();
+        }
+        if !crate::models::VARIABLE_TRANSPORTS.contains(&v.transport.as_str()) {
+            return Err(format!("unknown transport \"{}\" for variable \"{}\"", v.transport, v.key));
+        }
+        // catch in the editor what would otherwise only fail at send time
+        if v.transport == "header" {
+            crate::models::validate_header_var(&v.key, &v.default_value)?;
+            // Content-Type is set by the body mode itself (and carries the multipart
+            // boundary), so a variable of that name would append a second, conflicting
+            // copy rather than replace it.
+            if v.key.eq_ignore_ascii_case("content-type") {
+                return Err(
+                    "Content-Type is set by the body mode and can't be a header variable".into()
+                );
+            }
+        }
     }
     {
+        // header names are case-insensitive, so `X-Bill` and `x-bill` are one header —
+        // catch that here rather than appending two copies of it at send time
         let mut seen = std::collections::HashSet::new();
         for v in &endpoint.variables {
-            if !seen.insert(v.key.clone()) {
+            let ident = if v.transport == "header" {
+                v.key.to_ascii_lowercase()
+            } else {
+                v.key.clone()
+            };
+            if !seen.insert(ident) {
                 return Err(format!("duplicate variable \"{}\"", v.key));
             }
         }

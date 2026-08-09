@@ -51,7 +51,7 @@ Print Piper is a single Tauri 2 app (Rust core, Svelte UI) that:
 
 1. **Embeds an IPP server** (built on [`ippper`](https://github.com/ArcticLampyrid/ippper.rs)) and advertises itself over mDNS/DNS-SD as an IPP Everywhere printer — your OS's native print stack discovers it like any network printer. Zero driver code.
 2. **Captures print jobs as vector PDF** (macOS spools PDF natively), preserving the document title, user, and fonts.
-3. **Pops the pipe window** — the captured document on the left, a pulsating pipe in the middle, your endpoints on the right. The centered endpoint _latches onto_ the pipe; hit ⏎ (or click) and the PDF streams through (`multipart/form-data`, raw `application/pdf`, or GET trigger with metadata). Endpoints can declare **variables** (say, `name`) that you fill right in the pipe window — they ride along as form fields or query params.
+3. **Pops the pipe window** — the captured document on the left, a pulsating pipe in the middle, your endpoints on the right. The centered endpoint _latches onto_ the pipe; hit ⏎ (or click) and the PDF streams through (`multipart/form-data`, raw `application/pdf`, or GET trigger with metadata). Endpoints can declare **variables** (say, `name`) that you fill right in the pipe window — each one rides along as a form field, a query param, or a request header, whichever the endpoint expects.
 
 Riding the industry's IPP convergence: Microsoft is deprecating third-party print drivers in favor of IPP (Windows Protected Print), so this architecture is aligned with where all desktop OSes are heading.
 

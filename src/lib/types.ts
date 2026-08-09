@@ -3,11 +3,15 @@ export interface KeyValue {
   value: string;
 }
 
+/** Where a variable rides. "auto" = query for GET/raw, multipart field otherwise. */
+export type VariableTransport = "auto" | "query" | "header";
+
 export interface EndpointVariable {
   key: string;
   label: string;
   required: boolean;
   default_value: string;
+  transport: VariableTransport;
 }
 
 export interface Endpoint {
@@ -108,5 +112,5 @@ export function emptyEndpoint(): Endpoint {
 }
 
 export function emptyVariable(): EndpointVariable {
-  return { key: "", label: "", required: false, default_value: "" };
+  return { key: "", label: "", required: false, default_value: "", transport: "auto" };
 }

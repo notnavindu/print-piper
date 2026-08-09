@@ -7,7 +7,7 @@ pub struct KeyValue {
 }
 
 /// A per-send value the user fills in the picker before dispatch (e.g. "name").
-/// Sent as a query param (GET/raw) or text form field (multipart) under `key`.
+/// Where it rides is `transport`; `key` is the query-param / form-field / header name.
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct EndpointVariable {
     pub key: String,
@@ -17,6 +17,40 @@ pub struct EndpointVariable {
     pub required: bool,
     #[serde(default)]
     pub default_value: String,
+    /// "auto" | "query" | "header"
+    ///
+    /// `auto` is the pre-0.4 behaviour and stays the default so endpoints saved by
+    /// older builds keep sending exactly what they sent before: query param for
+    /// GET/raw, multipart text field otherwise. `query` and `header` pin the
+    /// transport regardless of method or body mode.
+    #[serde(default = "default_transport")]
+    pub transport: String,
+}
+
+fn default_transport() -> String {
+    "auto".into()
+}
+
+pub const VARIABLE_TRANSPORTS: [&str; 3] = ["auto", "query", "header"];
+
+/// Validate a header-bound variable's name and value. Shared by save-time validation and
+/// send-time resolution so both reject the same things with the same wording.
+///
+/// `HeaderValue::from_str` accepts raw UTF-8 bytes, but a server reading the header
+/// decodes them as latin-1 and gets mojibake — so the round-trip only holds for ASCII.
+pub fn validate_header_var(key: &str, value: &str) -> Result<(), String> {
+    if reqwest::header::HeaderName::try_from(key).is_err() {
+        return Err(format!(
+            "\"{key}\" is not a valid header name — letters, digits and dashes only"
+        ));
+    }
+    if !value.is_ascii() || reqwest::header::HeaderValue::from_str(value).is_err() {
+        return Err(format!(
+            "variable \"{key}\" has a value a header can't carry (headers are ASCII-only) — \
+             switch it to query, or use a multipart endpoint"
+        ));
+    }
+    Ok(())
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

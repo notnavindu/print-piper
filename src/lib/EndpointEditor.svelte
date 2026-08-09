@@ -23,6 +23,9 @@
   let testResult = $state<DispatchResult | "pending" | null>(null);
 
   const dirty = $derived(JSON.stringify($state.snapshot(draft)) !== original);
+  const autoTransportLabel = $derived(
+    draft.method === "GET" || draft.body_mode === "raw" ? "query param" : "form field",
+  );
 
   async function save() {
     error = "";
@@ -98,9 +101,18 @@
     <h3>Variables <span class="h-hint">asked for in the pipe window, every send</span></h3>
     {#each draft.variables as v, i (i)}
       <div class="var-row" transition:slide={{ duration: 140 }}>
-        <input class="mono" bind:value={v.key} placeholder="key (e.g. name)" />
+        <input
+          class="mono"
+          bind:value={v.key}
+          placeholder={v.transport === "header" ? "X-Patient-Name" : "key (e.g. name)"}
+        />
         <input bind:value={v.label} placeholder="Label (optional)" />
         <input bind:value={v.default_value} placeholder="Default (optional)" />
+        <select bind:value={v.transport} title="Where this value rides in the request">
+          <option value="auto">auto</option>
+          <option value="query">query</option>
+          <option value="header">header</option>
+        </select>
         <label class="req" title="Send is blocked until this is filled">
           <input type="checkbox" bind:checked={v.required} />
           req
@@ -111,7 +123,9 @@
     <button class="ghost" onclick={() => draft.variables.push(emptyVariable())}>+ variable</button>
     {#if draft.variables.length > 0}
       <p class="hint">
-        Sent as {draft.method === "GET" || draft.body_mode === "raw" ? "query params" : "form fields"} under each key.
+        <b>auto</b> sends each value as a {autoTransportLabel} under its key. Pick
+        <b>query</b> or <b>header</b> to override — a header key is the header name and must
+        be ASCII, and anything in the URL shows up in the server's access logs.
       </p>
     {/if}
   </section>
@@ -268,12 +282,18 @@
   }
   .var-row {
     display: grid;
-    grid-template-columns: 1.1fr 1fr 1fr auto auto;
+    grid-template-columns: 1.1fr 1fr 1fr auto auto auto;
     gap: 6px;
     align-items: center;
   }
   .var-row input {
     min-width: 0;
+  }
+  .var-row select {
+    padding: 6px 4px;
+    font-size: 11.5px;
+    color: var(--muted);
+    font-family: var(--mono);
   }
   .req {
     flex-direction: row;

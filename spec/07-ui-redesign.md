@@ -84,16 +84,26 @@ pub struct EndpointVariable {
     pub label: String,         // optional human label ("" → key shown)
     pub required: bool,        // gates the Send button; backend re-validates
     pub default_value: String, // prefilled in the picker
+    pub transport: String,     // "auto" | "query" | "header" (serde-default "auto")
 }
 ```
 
-Dispatch semantics — variables ride the same channel as endpoint metadata:
+Dispatch semantics — `transport` decides the channel; `auto` follows the endpoint shape,
+which is the v0.3 behaviour and the default so older `endpoints.json` is unchanged:
 
-| method / body     | variables become                              |
-|-------------------|-----------------------------------------------|
-| GET               | query params (after `title`/`bytes`/`format`) |
-| POST multipart    | text form fields (after `extra_fields`)       |
-| POST raw          | query params on the URL                       |
+| transport | variables become                                                      |
+|-----------|-----------------------------------------------------------------------|
+| `auto`    | GET → query params (after `title`/`bytes`/`format`); POST multipart → text form fields (after `extra_fields`); POST raw → query params |
+| `query`   | query params, whatever the method and body mode                       |
+| `header`  | request headers — `key` IS the header name                            |
+
+`header` exists so a value need not ride the URL, where it lands in the receiving
+server's access logs. Its constraints are validated at save time and again before any
+bytes leave the machine: the key must be a legal header name, must not be `Content-Type`
+(set by the body mode, and carrier of the multipart boundary), and is de-duplicated
+case-insensitively against other header variables. The value must be ASCII —
+`HeaderValue` accepts raw UTF-8, but a server reading the header decodes it as latin-1
+and gets mojibake, so non-ASCII text must use `query` or a multipart field.
 
 `dispatch_job(job_id, endpoint_id, variables?)` takes a `{key: value}` map; the backend
 resolves each declared variable as provided value → `default_value` → error if
